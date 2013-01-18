@@ -16,7 +16,7 @@ define('API_DEBUG', 0);
 define('API_DATAFORMAT', 'OBJECT'); // OBJECT, JSON
 
 // database access
-define('DB_HOSTNAME','localhost');
+define('DB_HOSTNAME','sql.vertesdesign.nazwa.pl:3307');
 define('DB_USERNAME','vertesdesign_58');
 define('DB_PASSWORD','HUrt#12345');
 define('DB_DATABASE','vertesdesign_58');
