@@ -8,14 +8,34 @@ $config['autoload_controller_katashi'] = array();
 
 /*
 | -------------------------------------------------------------------------
+| UI - Available Admin
+| -------------------------------------------------------------------------
+*/
+$config['admin_hq'] = array(
+    0 => array('iconCls'=>'group_gear', 'text'=>'Produkt', 'type'=>'href', 'url'=>APP_URL.'/wh:product/display_all'),
+    1 => array('iconCls'=>'group_gear', 'text'=>'Klient', 'type'=>'href', 'url'=>APP_URL.'/wh:client/display_all'),
+    2 => array('iconCls'=>'group_gear', 'text'=>'Zamówienie', 'type'=>'href', 'url'=>APP_URL.'/wh:order/display_all')
+);
+$config['admin_office'] = array(
+    0 => array('iconCls'=>'group_gear', 'text'=>'List', 'type'=>'href', 'url'=>APP_URL.'/wh:letter/display_all'),
+    1 => array('iconCls'=>'group_gear', 'text'=>'Faktura', 'type'=>'href', 'url'=>APP_URL.'/wh:invoice/display_all'),
+    2 => array('iconCls'=>'group_gear', 'text'=>'Rozliczenie', 'type'=>'href', 'url'=>APP_URL.'/wh:account/display_all'),
+);
+$config['admin_dms'] = array(
+    0 => array('iconCls'=>'group_gear', 'text'=>'Obieg', 'type'=>'href', 'url'=>APP_URL.'/wh:dms/display_all'),
+    1 => array('iconCls'=>'group_gear', 'text'=>'Archiwum', 'type'=>'href', 'url'=>APP_URL.'/wh:archive/display_all')
+);
+
+/*
+| -------------------------------------------------------------------------
 | UI - Available system
 | -------------------------------------------------------------------------
 */
 $config['system'] = array(
-    0 => array('iconCls'=>'door_out', 'text'=>'Wyloguj', 'type'=>'href', 'url'=>APP_URL.'/_access:administrator/logout')
-    /*0 => array('iconCls'=>'group_gear', 'id'=>'administrator', 'text'=>'Administratorzy', 'type'=>'tab', 'url'=>APP_URL.'/administrator/display'),
+    0 => array('iconCls'=>'group_gear', 'id'=>'administrator', 'text'=>'Administrator', 'type'=>'tab', 'url'=>APP_URL.'/_access:administrator/display'),
     1 => array('-'),
-    2 => array('iconCls'=>'database_connect', 'id'=>'data_import', 'text'=>'Import Danych', 'type'=>'tab', 'url'=>APP_URL.'/data_import/display')*/
+    2 => array('iconCls'=>'door_out', 'text'=>'Wyloguj', 'type'=>'href', 'url'=>APP_URL.'/_access:administrator/logout')
+    /*2 => array('iconCls'=>'database_connect', 'id'=>'data_import', 'text'=>'Import Danych', 'type'=>'tab', 'url'=>APP_URL.'/data_import/display')*/
 );
 
 /*

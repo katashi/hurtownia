@@ -1,7 +1,7 @@
 //
-// north session
+// north admin_hq
 // 
-function North_Session() {
+function North_Admin_Hq() {
 	
 	//
 	// controller section
@@ -11,8 +11,8 @@ function North_Session() {
 	this.init = function() {
 		// predefine menu to attach to button
 		var config = new Object({
-			id: 'north_session_menu',
-			url: base_url+'/_system:menu/get/session'
+			id: 'north_admin_hq_menu',
+			url: base_url+'/_system:menu/get/admin_hq'
 		});
 		this.ui_menu = new Menu();
 		this.ui_menu.init(config);
@@ -22,8 +22,8 @@ function North_Session() {
 		// here we construct ui
 		var config = new Object({
 			iconCls: 'brick',
-			text: 'Sesja',
-			tooltip: {title: 'Sesja', text: 'Obsługa sesji', autoHide:true},
+			text: 'A/Hq',
+			tooltip: {title: 'Hq', text: '', autoHide:true},
 			menu: menu
 		});
 		this.ui = new Button();

@@ -10,6 +10,9 @@ var _west = false;
 //
 // north configuration
 //
+var _north_admin_hq = true;
+var _north_admin_office = true;
+var _north_admin_dms = true;
 var _north_system = true;
 
 
