@@ -1,0 +1,10 @@
+﻿Nazwa bazy danych: vertesdesign_58
+Typ bazy: MySQL 5.5
+Adres serwera baz danych: sql.vertesdesign.nazwa.pl
+Port serwera baz danych: 3307
+Uzytkownik bazy (login): vertesdesign_58
+Panel zarzadzania baza danych: https://mysql.nazwa.pl/
+--
+Haslo: HUrt#12345
+--
+GIT: https://github.com/katashi/hurtownia.git
