@@ -8,11 +8,14 @@ $config['autoload_controller_katashi'] = array();
 
 /*
 | -------------------------------------------------------------------------
-| UI - Available session
+| UI - Available system
 | -------------------------------------------------------------------------
 */
-$config['session'] = array(
+$config['system'] = array(
     0 => array('iconCls'=>'door_out', 'text'=>'Wyloguj', 'type'=>'href', 'url'=>APP_URL.'/_access:administrator/logout')
+    /*0 => array('iconCls'=>'group_gear', 'id'=>'administrator', 'text'=>'Administratorzy', 'type'=>'tab', 'url'=>APP_URL.'/administrator/display'),
+    1 => array('-'),
+    2 => array('iconCls'=>'database_connect', 'id'=>'data_import', 'text'=>'Import Danych', 'type'=>'tab', 'url'=>APP_URL.'/data_import/display')*/
 );
 
 /*
@@ -26,19 +29,6 @@ $config['session'] = array(
     2 => array('iconCls'=>'wand', 'id'=>'newsletter_configuration', 'text'=>'Konfiguracja', 'type'=>'tab', 'url'=>APP_URL.'/newsletter_configuration/display'),
     3 => array('iconCls'=>'newspaper_go', 'id'=>'newsletter_distribution', 'text'=>'Dystrybucja', 'type'=>'tab', 'url'=>APP_URL.'/newsletter_distribution/display')
 );*/
-
-/*
-| -------------------------------------------------------------------------
-| UI - Available system
-| -------------------------------------------------------------------------
-*/
-/*$config['system'] = array(
-    0 => array('iconCls'=>'group_gear', 'id'=>'administrator', 'text'=>'Administratorzy', 'type'=>'tab', 'url'=>APP_URL.'/administrator/display'),
-    1 => array('-'),
-    2 => array('iconCls'=>'database_connect', 'id'=>'data_import', 'text'=>'Import Danych', 'type'=>'tab', 'url'=>APP_URL.'/data_import/display')
-);*/
-
-
 
 /*
 |--------------------------------------------------------------------------

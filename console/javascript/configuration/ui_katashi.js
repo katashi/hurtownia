@@ -10,6 +10,10 @@ var _west = false;
 //
 // north configuration
 //
+var _north_system = true;
+
+
+
 //var _north_session = true;
 //var _north_newsletter = true;
 //var _north_system = true;
