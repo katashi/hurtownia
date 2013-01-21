@@ -9,7 +9,6 @@ class Product extends Main {
         $this->ci = $_ci;
         // load models
         $this->load->model('main_model');
-        $this->load->model('_system/tree_model');
         $this->load->model('wh/product_model');
     }
 
@@ -28,6 +27,9 @@ class Product extends Main {
     // load
     function load_all() {
         echo '{"total":'.json_encode($this->product_model->load_all_count()).', "data":'.json_encode($this->product_model->load_all()).'}';
+    }
+    function load($id) {
+        echo '{"success": 1, "data":'.json_encode($this->product_model->load($id)).'}';
     }
 
     // active set
