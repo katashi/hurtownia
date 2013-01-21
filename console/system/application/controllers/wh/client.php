@@ -25,6 +25,17 @@ class Client extends Main {
         $this->ci->smarty->display('wh_admin/client_edit.html');
     }
 
+    // load
+    function load_all() {
+        echo '{"total":'.json_encode($this->client_model->load_all_count()).', "data":'.json_encode($this->client_model->load_all()).'}';
+    }
+
+    // active set
+    function active_set($id = null, $state = false) {
+        if (!isset($id)) { die; }
+        $result = $this->client_model->active_set($id, $state);
+        echo 'grid';
+    }
 
 
 
