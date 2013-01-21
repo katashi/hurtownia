@@ -15,12 +15,9 @@ var _north_admin_office = true;
 var _north_admin_dms = true;
 var _north_system = true;
 
-
-
 //var _north_session = true;
 //var _north_newsletter = true;
 //var _north_system = true;
-
 
 //
 // west configuration

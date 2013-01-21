@@ -12,18 +12,18 @@ $config['autoload_controller_katashi'] = array();
 | -------------------------------------------------------------------------
 */
 $config['admin_hq'] = array(
-    0 => array('iconCls'=>'group_gear', 'text'=>'Produkt', 'type'=>'href', 'url'=>APP_URL.'/wh:product/display_all'),
-    1 => array('iconCls'=>'group_gear', 'text'=>'Klient', 'type'=>'href', 'url'=>APP_URL.'/wh:client/display_all'),
-    2 => array('iconCls'=>'group_gear', 'text'=>'Zamówienie', 'type'=>'href', 'url'=>APP_URL.'/wh:order/display_all')
+    0 => array('iconCls'=>'group_gear', 'text'=>'Produkt', 'type'=>'tab', 'url'=>APP_URL.'/wh:product'),
+    1 => array('iconCls'=>'group_gear', 'text'=>'Klient', 'type'=>'tab', 'url'=>APP_URL.'/wh:client'),
+    2 => array('iconCls'=>'group_gear', 'text'=>'Zamówienie', 'type'=>'tab', 'url'=>APP_URL.'/wh:order')
 );
 $config['admin_office'] = array(
-    0 => array('iconCls'=>'group_gear', 'text'=>'List', 'type'=>'href', 'url'=>APP_URL.'/wh:letter/display_all'),
-    1 => array('iconCls'=>'group_gear', 'text'=>'Faktura', 'type'=>'href', 'url'=>APP_URL.'/wh:invoice/display_all'),
-    2 => array('iconCls'=>'group_gear', 'text'=>'Rozliczenie', 'type'=>'href', 'url'=>APP_URL.'/wh:account/display_all'),
+    0 => array('iconCls'=>'group_gear', 'text'=>'List', 'type'=>'tab', 'url'=>APP_URL.'/wh:letter'),
+    1 => array('iconCls'=>'group_gear', 'text'=>'Faktura', 'type'=>'tab', 'url'=>APP_URL.'/wh:invoice'),
+    2 => array('iconCls'=>'group_gear', 'text'=>'Rozliczenie', 'type'=>'tab', 'url'=>APP_URL.'/wh:account'),
 );
 $config['admin_dms'] = array(
-    0 => array('iconCls'=>'group_gear', 'text'=>'Obieg', 'type'=>'href', 'url'=>APP_URL.'/wh:dms/display_all'),
-    1 => array('iconCls'=>'group_gear', 'text'=>'Archiwum', 'type'=>'href', 'url'=>APP_URL.'/wh:archive/display_all')
+    0 => array('iconCls'=>'group_gear', 'text'=>'Obieg', 'type'=>'tab', 'url'=>APP_URL.'/wh:dms'),
+    1 => array('iconCls'=>'group_gear', 'text'=>'Archiwum', 'type'=>'tab', 'url'=>APP_URL.'/wh:archive')
 );
 
 /*

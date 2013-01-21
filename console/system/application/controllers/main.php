@@ -75,7 +75,7 @@ class Main extends Controller {
             $command_module = $command_sequence;
         }
         // lets go to methods/arguments
-		if (isset($this->uri[1])) {	$command_method = $this->uri[1]; } else { $command_method = ''; }
+		if (isset($this->uri[1])) {	$command_method = $this->uri[1]; } else { $command_method = 'display'; }
 		if (isset($this->uri[2])) { $command_arguments = explode(",", $this->uri[2]); } else { $command_arguments = array(); }
 		// now we will create new class instance including desired controller ( which will include required model )
 		if ($command_module) { $$command_module = $this->run_factory($command_module_directory, $command_module); }
@@ -204,22 +204,4 @@ class Main extends Controller {
         $this->ci->smarty->display(CONFIGURATION.'/'.$this->name.'_edit.html');
     }
 
-    //
-    // active set
-    //
-    function active_set($id=null, $state=false) {
-        if (!isset($id)) { die; }
-        $result = $this->main_model->active_set($id, $state);
-        echo 'grid';
-    }
-
-    //
-    // suspend set
-    //
-    function suspend_set($id=null, $state=false) {
-        if (!isset($id)) { die; }
-        $result = $this->main_model->suspend_set($id, $state);
-        echo 'grid';
-    }
-	
 }
