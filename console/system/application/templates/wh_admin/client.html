@@ -17,7 +17,13 @@ whc_store.init(config);
 
 // paging toolbar
 var config = new Object({
-	store: whc_store.display
+	store: whc_store.display,
+    items: ['-',
+    {
+        iconCls: 'x-btn-text-icon add',
+        handler: add,
+        text: 'Dodaj'
+    }]
 });
 whc_ptb = new PagingToolBar();
 whc_ptb.init(config);
@@ -26,7 +32,7 @@ whc_ptb.init(config);
 var config = new Object({
 	store: whc_store.display,
 	tbar: whc_ptb.display,
-	title: 'Użytkownicy',
+	title: 'Klient',
 	columns: [
 		{ id: 'id', dataIndex: 'id', header: 'Id', menuDisabled: true, sortable: false, width: 50 },
 		{ id: 'user', dataIndex: 'user', header: 'Użytkownik', menuDisabled: true, sortable: false },
@@ -35,7 +41,16 @@ var config = new Object({
         { id: 'date_added', dataIndex: 'date_added', header: 'Data', menuDisabled: true, sortable: false },
         { id: 'options', header: 'Opcje', renderer: render_options, menuDisabled: true, sortable: false }
 	],
-    url: base_url+'/wh:client/edit_ui'
+    listeners: {
+        celldblclick: function(grid, rowIndex, columnIndex, e) {
+            var record = grid.getStore().getAt(rowIndex);
+            var fieldName = grid.getColumnModel().getDataIndex(columnIndex);
+            var data = record.get(fieldName);
+            var data_id = record.get('id');
+            var data_user = record.get('user');
+            edit(data_id, data_user);
+        }
+    }
 });
 whc_grid = new EditorGridPanel();
 whc_grid.init(config);
@@ -65,10 +80,16 @@ function render_options(value, p, record) {
         url = '/'+n1+'/active_set/'+record.data.id+',0,wh_client';
         img = 'accept.png';
     }
-    return String.format('<a href="javascript:active(\''+base_url+url+'\');"><img src="images/icon/'+img+'" border="0"></a> <a href="javascript:edit('+record.data.id+',\''+record.data.title+'\');"><img src="images/icon/page_edit.png"></a> <a href="javascript:delete(\''+base_url+'/'+n1+'/delete/'+record.data.id+'\');"><img src="images/icon/delete.png" border="0"></a>');
+    return String.format('<a href="javascript:active(\''+base_url+url+'\');"><img src="images/icon/'+img+'" border="0"></a> <a href="javascript:edit('+record.data.id+',\''+record.data.user+'\');"><img src="images/icon/page_edit.png"></a> <a href="javascript:delete(\''+base_url+'/'+n1+'/delete/'+record.data.id+'\');"><img src="images/icon/delete.png" border="0"></a>');
 }
 
 // add
+function add() {
+    tab_id = 'whc_add';
+    tab_title = 'Dodaj';
+    tab_url = base_url+'/'+n1+'/display_add';
+    center.ui.tab_add(tab_id, tab_title, tab_url);
+}
 
 // edit
 function edit(id, title) {

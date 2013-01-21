@@ -1,0 +1,50 @@
+<script type="text/javascript">
+{literal}
+
+// panel
+var config = new Object({
+	title: 'Dodaj',
+	items: [{
+		fieldLabel: 'Użytkownik',
+		name: 'user',
+		xtype: 'textfield',
+		width: 350
+	},{
+		fieldLabel: 'Imię',
+		name: 'name',
+		xtype: 'textfield',
+		width: 350
+	},{
+		fieldLabel: 'Nazwisko',
+		name: 'surname',
+		xtype: 'textfield',
+		width: 350
+	}],
+	buttons: [{
+		handler: whc_add_submit,
+		text: 'Dodaj'
+	}]
+});
+whc_add_fp = new FormPanel();
+whc_add_fp.init(config);
+whc_add_fp.display.render(Ext.get('div_whc_add'));
+
+// submit
+function whc_add_submit() {
+    whc_add_fp.display.form.submit({
+        method: 'POST',
+        url: base_url +'/wh:client/add',
+        success: function() {
+            Ext.MessageBox.alert('Informacja', 'Gotowe');
+            whc_add_fp.display.getForm().reset();
+            whc_store.display.reload();
+        },
+        failure: function() {
+            Ext.MessageBox.alert('Informacja', 'Błąd');
+        },
+        waitMsg: 'Oczekiwanie'
+    });
+}
+{/literal}
+</script>
+<div id="div_whc_add"></div>

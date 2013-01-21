@@ -1,0 +1,78 @@
+<script type="text/javascript">
+{literal}
+
+/*this.a = whc_edit_fp_{/literal}{$id}{literal};
+    var name = window['a']; // === undefined
+    alert(name);
+    name = this['a']; // === 1
+    alert(name);*/
+
+a = 'whc_edit_fp_{/literal}{$id}{literal}';
+alert(a);
+
+// panel
+var config = new Object({
+	title: 'Edytuj',
+	items: [{
+        fieldLabel: 'Użytkownik',
+        name: 'user',
+        xtype: 'textfield',
+        width: 350
+    },{
+        fieldLabel: 'Imię',
+        name: 'name',
+        xtype: 'textfield',
+        width: 350
+    },{
+        fieldLabel: 'Nazwisko',
+        name: 'surname',
+        xtype: 'textfield',
+        width: 350
+    }],
+	buttons: [{
+		handler: whc_edit_submit,
+		text: 'Zapisz'
+	}]
+});
+whc_edit_fp_{/literal}{$id}{literal} = new FormPanel();
+var name = 'whc_edit_fp_{/literal}{$id}{literal}';
+var whc_edit_fp = eval(name);
+whc_edit_fp.init(config);
+whc_edit_fp.display.render(Ext.get('div_whc_edit_{/literal}{$id}{literal}'));
+
+// submit
+function whc_edit_submit() {
+   whc_edit_fp.display.form.submit({
+        method: 'POST',
+        url: base_url +'/wh:client/edit/{/literal}{$id}{literal}',
+        success: function() {
+            Ext.MessageBox.alert('Informacja', 'Obiekt zapisany');
+            whc_store.display.reload();
+        },
+        failure: function() {
+            Ext.MessageBox.alert('Informacja', 'Błąd');
+        },
+        waitMsg: 'Oczekiwanie'
+    });
+}
+
+// load
+function whc_edit_load() {
+    whc_edit_fp.display.form.load({
+        method: 'POST',
+        url: base_url +'/wh:client/load/{/literal}{$id}{literal}',
+        waitMsg: 'Oczekiwanie',
+        success: function() {
+        },
+        failure: function() {
+            Ext.MessageBox.alert('Informacja', 'Błąd');
+        }
+    });
+}
+
+// load
+whc_edit_load();
+
+{/literal}
+</script>
+<div id="div_whc_edit_{$id}"></div>

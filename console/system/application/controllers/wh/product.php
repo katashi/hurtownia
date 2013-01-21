@@ -1,56 +1,39 @@
 <?php
 if (!defined('BASEPATH')) die;
 
-class Client extends Main {
+class Product extends Main {
 
-    function Client($_ci = '') {
+    function Product($_ci = '') {
         parent::Controller();
         //
         $this->ci = $_ci;
         // load models
         $this->load->model('main_model');
         $this->load->model('_system/tree_model');
-        $this->load->model('wh/client_model');
+        $this->load->model('wh/product_model');
     }
 
     // display
     function display() {
-        $this->ci->smarty->display('wh_admin/client.html');
+        $this->ci->smarty->display('wh_admin/product.html');
     }
     function display_add() {
-        $this->ci->smarty->display('wh_admin/client_add.html');
+        $this->ci->smarty->display('wh_admin/product_add.html');
     }
     function display_edit($id = null) {
         $this->ci->smarty->assign('id', $id);
-        $this->ci->smarty->display('wh_admin/client_edit.html');
+        $this->ci->smarty->display('wh_admin/product_edit.html');
     }
 
     // load
     function load_all() {
-        echo '{"total":'.json_encode($this->client_model->load_all_count()).', "data":'.json_encode($this->client_model->load_all()).'}';
+        echo '{"total":'.json_encode($this->product_model->load_all_count()).', "data":'.json_encode($this->product_model->load_all()).'}';
     }
-    function load($id) {
-        echo '{"success": 1, "data":'.json_encode($this->client_model->load($id)).'}';
-    }
-
-    // add
-    function add() {
-        $result = $this->client_model->add();
-        echo '{"success": '. $result .'}';
-    }
-
-    // edit
-    function edit($id = null) {
-        $result = $this->client_model->edit($id);
-        echo '{"success": '. $result .'}';
-    }
-
-    // delete
 
     // active set
     function active_set($id = null, $state = false) {
         if (!isset($id)) { die; }
-        $result = $this->client_model->active_set($id, $state);
+        $result = $this->product_model->active_set($id, $state);
         echo 'grid';
     }
 

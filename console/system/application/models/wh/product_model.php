@@ -1,13 +1,13 @@
 <?php
-class Client_Model extends Main_Model {
+class Product_Model extends Main_Model {
 	
-	function Client_Model() {
+	function Product_Model() {
 		// Call the Model constructor
 		parent::Model();
 		//
 		if (isset($this->ci)) { $this->db = $this->ci->db; }
         //
-        $this->table_name = 'wh_client';
+        $this->table_name = 'wh_product';
 	}
 
     // load
@@ -21,28 +21,6 @@ class Client_Model extends Main_Model {
         $record = $query->result_array();
         return $record;
     }
-    function load($id) {
-        $this->db->where('id', $id);
-        $query = $this->db->get($this->table_name);
-        $record = $query->row_array();
-        return $record;
-    }
-
-    // add
-    function add() {
-        $this->db->insert($this->table_name, $_POST);
-        return 1;
-    }
-
-    // edit
-    function edit($id) {
-        // update
-        $record = $_POST;
-        $record['date_last_modified'] = date("Y-m-d H:i:s");
-        $this->db->where('id', $id);
-        $this->db->update($this->table_name, $record);
-        return 1;
-    }
 
     // active
     function active_set($id, $state) {
@@ -52,7 +30,9 @@ class Client_Model extends Main_Model {
         return '{"success": true}';
     }
 
+    // limit check
     /*
+
     // load
     function load_all_count() {
         $this->db->from('kreomaniak_client');
