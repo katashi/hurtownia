@@ -1,78 +1,235 @@
 <script type="text/javascript">
-{literal}
+    {literal}
 
-/*this.a = whc_edit_fp_{/literal}{$id}{literal};
+    /*this.a = whc_edit_fp_{/literal}{$id}{literal};
     var name = window['a']; // === undefined
     alert(name);
     name = this['a']; // === 1
     alert(name);*/
 
-a = 'whc_edit_fp_{/literal}{$id}{literal}';
-alert(a);
+    //a = 'whc_edit_fp_{/literal}{$id}{literal}';
+    //alert(a);
 
-// panel
-var config = new Object({
-	title: 'Edytuj',
-	items: [{
-        fieldLabel: 'Użytkownik',
-        name: 'user',
-        xtype: 'textfield',
-        width: 350
-    },{
-        fieldLabel: 'Imię',
-        name: 'name',
-        xtype: 'textfield',
-        width: 350
-    },{
-        fieldLabel: 'Nazwisko',
-        name: 'surname',
-        xtype: 'textfield',
-        width: 350
-    }],
-	buttons: [{
-		handler: whc_edit_submit,
-		text: 'Zapisz'
-	}]
-});
-whc_edit_fp_{/literal}{$id}{literal} = new FormPanel();
-var name = 'whc_edit_fp_{/literal}{$id}{literal}';
-var whc_edit_fp = eval(name);
-whc_edit_fp.init(config);
-whc_edit_fp.display.render(Ext.get('div_whc_edit_{/literal}{$id}{literal}'));
+    //    radio buttons for company field
+    var radios = new Ext.form.RadioGroup({   
+        fieldLabel: 'Firma',                         
+        columns: 2,  
+        items: [   
+            {boxLabel: 'Tak', name: 'company', inputValue: 'true', checked: true},   
+            {boxLabel: 'Nie', name: 'company', inputValue: 'false',
+                handler: function(field, value) {
+                    if (value) {
+                        Ext.getCmp('company_name').disable();
+                        Ext.getCmp('company_nip').disable();
+                        Ext.getCmp('company_zip').disable();
+                        Ext.getCmp('company_city').disable();
+                        Ext.getCmp('company_address').disable();
+                        Ext.getCmp('company_country').disable();
+                        Ext.getCmp('company_phone').disable();
+                        Ext.getCmp('company_name').setValue('');
+                        Ext.getCmp('company_nip').setValue('');
+                        Ext.getCmp('company_zip').setValue('');
+                        Ext.getCmp('company_city').setValue('');
+                        Ext.getCmp('company_address').setValue('');
+                        Ext.getCmp('company_country').setValue('');
+                        Ext.getCmp('company_phone').setValue('');
+                    } else {
+                        Ext.getCmp('company_name').enable();  
+                        Ext.getCmp('company_nip').enable();
+                        Ext.getCmp('company_zip').enable();
+                        Ext.getCmp('company_city').enable();
+                        Ext.getCmp('company_address').enable();
+                        Ext.getCmp('company_country').enable();
+                        Ext.getCmp('company_phone').enable();
+                    }            
+                }}
+        ]
+    });   
+    //    VType for checking if password match
+    Ext.apply(Ext.form.VTypes, {
+        password: function (val, field) {
+            if (field.initialPassField) {
+                var pwd = Ext.getCmp(field.initialPassField);
+                return (val == pwd.getValue());
+            }
+            return true;
+        },
+        passwordText: 'Hasła nie są identyczne!<br/>Prosimy wpisać je ponownie'
 
-// submit
-function whc_edit_submit() {
-   whc_edit_fp.display.form.submit({
-        method: 'POST',
-        url: base_url +'/wh:client/edit/{/literal}{$id}{literal}',
-        success: function() {
-            Ext.MessageBox.alert('Informacja', 'Obiekt zapisany');
-            whc_store.display.reload();
-        },
-        failure: function() {
-            Ext.MessageBox.alert('Informacja', 'Błąd');
-        },
-        waitMsg: 'Oczekiwanie'
     });
-}
-
-// load
-function whc_edit_load() {
-    whc_edit_fp.display.form.load({
-        method: 'POST',
-        url: base_url +'/wh:client/load/{/literal}{$id}{literal}',
-        waitMsg: 'Oczekiwanie',
-        success: function() {
+    //    VType for zip code validation
+    var zipTest = /^\d{2}-\d{3}$/i;
+    Ext.apply(Ext.form.VTypes, {
+        zip: function(val, field) {
+            return zipTest.test(val);
         },
-        failure: function() {
-            Ext.MessageBox.alert('Informacja', 'Błąd');
-        }
+        zipText: 'Niepoprawny format kodu pocztowego.'
     });
-}
 
-// load
-whc_edit_load();
+    //    VType for mobile phone number validation
+    var mobileTest = /^\+\d{10,15}$/i;
+    Ext.apply(Ext.form.VTypes, {
+        mobile: function(val, field) {
+            return mobileTest.test(val);
+        },
+        mobileText: 'Niepoprawny format telefonu komórkowego.'
+    });
 
-{/literal}
+    //    panel
+    var config = new Object({
+        title: 'Dodaj',
+        items: [{
+                fieldLabel: 'Użytkownik',
+                name: 'user',
+                xtype: 'textfield',
+                width: 350
+            },{
+                fieldLabel: 'Hasło',
+                name: 'password',
+                xtype: 'textfield',
+                inputType: 'password',
+                id: 'firstPassword',
+                width: 350
+            },{
+                fieldLabel: 'Powtórz hasło',
+                name: 'password_hash',
+                xtype: 'textfield',
+                inputType: 'password',
+                vtype: 'password',
+                initialPassField: 'firstPassword',
+                width: 350
+            },{
+                fieldLabel: 'Imię',
+                name: 'name',
+                xtype: 'textfield',
+                width: 350
+            },{
+                fieldLabel: 'Nazwisko',
+                name: 'surname',
+                xtype: 'textfield',
+                width: 350
+            },{
+                fieldLabel: 'Kod pocztowy',
+                name: 'zip',
+                xtype: 'textfield',
+                vtype: 'zip',
+                width: 350
+            },{
+                fieldLabel: 'Miasto',
+                name: 'city',
+                xtype: 'textfield',
+                width: 350
+            },{
+                fieldLabel: 'Adres',
+                name: 'address',
+                xtype: 'textfield',
+                width: 350
+            },{
+                fieldLabel: 'Państwo',
+                name: 'country',
+                xtype: 'textfield',
+                width: 350
+            },{
+                fieldLabel: 'Telefon',
+                name: 'phone',
+                xtype: 'textfield',
+                width: 350
+            },{
+                fieldLabel: 'Telefon komórkowy',
+                name: 'mobile',
+                xtype: 'textfield',
+                vtype: 'mobile',
+                width: 350
+            }, radios, {
+                fieldLabel: 'Nazwa firmy',
+                name: 'company_name',
+                id: 'company_name',
+                xtype: 'textfield',
+                width: 350
+            },{
+                fieldLabel: 'NIP',
+                name: 'company_nip',
+                id: 'company_nip',
+                xtype: 'textfield',
+                width: 350
+            },{
+                fieldLabel: 'Kod pocztowy firmy',
+                name: 'company_zip',
+                id: 'company_zip',
+                xtype: 'textfield',
+                vtype: 'zip',
+                width: 350
+            },{
+                fieldLabel: 'Miasto firmy',
+                name: 'company_city',
+                id: 'company_city',
+                xtype: 'textfield',
+                width: 350
+            },{
+                fieldLabel: 'Adres firmy',
+                name: 'company_address',
+                id: 'company_address',
+                xtype: 'textfield',
+                width: 350
+            },{
+                fieldLabel: 'Państwo firmy',
+                name: 'company_country',
+                id: 'company_country',
+                xtype: 'textfield',
+                width: 350
+            },{
+                fieldLabel: 'Telefon firmy',
+                name: 'company_phone',
+                id: 'company_phone',
+                xtype: 'textfield',
+                width: 350
+            }
+            
+        ],
+        buttons: [{
+                handler: whc_edit_submit,
+                text: 'Zapisz'
+            }]
+    });
+    whc_edit_fp_{/literal}{$id}{literal} = new FormPanel();
+    var name = 'whc_edit_fp_{/literal}{$id}{literal}';
+    var whc_edit_fp = eval(name);
+    whc_edit_fp.init(config);
+    whc_edit_fp.display.render(Ext.get('div_whc_edit_{/literal}{$id}{literal}'));
+
+    // submit
+    function whc_edit_submit() {
+        whc_edit_fp.display.form.submit({
+            method: 'POST',
+            url: base_url +'/wh:client/edit/{/literal}{$id}{literal}',
+            success: function() {
+                Ext.MessageBox.alert('Informacja', 'Obiekt zapisany');
+                whc_store.display.reload();
+            },
+            failure: function() {
+                Ext.MessageBox.alert('Informacja', 'Błąd');
+            },
+            waitMsg: 'Oczekiwanie'
+        });
+    }
+
+    // load
+    function whc_edit_load() {
+        whc_edit_fp.display.form.load({
+            method: 'POST',
+            url: base_url +'/wh:client/load/{/literal}{$id}{literal}',
+            waitMsg: 'Oczekiwanie',
+            success: function() {
+            },
+            failure: function() {
+                Ext.MessageBox.alert('Informacja', 'Błąd');
+            }
+        });
+    }
+
+    // load
+    whc_edit_load();
+
+    {/literal}
 </script>
 <div id="div_whc_edit_{$id}"></div>

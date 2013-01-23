@@ -1,114 +1,114 @@
 <script type="text/javascript">
-{literal}
+    {literal}
 
-// shortcuts
-var n1 = 'wh:client';
+    // shortcuts
+    var n1 = 'wh:client';
 
-// store
-var fields = new Array('id','user','name','surname','date_added','active');
-var config = new Object({
-	fields: fields,
-	format: 'json',
-	id: 'whc_store',
-	url: base_url+'/'+n1+'/load_all'
-});
-whc_store = new Store();
-whc_store.init(config);
+    // store
+    var fields = new Array('id','user','name','surname','date_added','active');
+    var config = new Object({
+        fields: fields,
+        format: 'json',
+        id: 'whc_client',
+        url: base_url+'/'+n1+'/load_all'
+    });
+    whc_store = new Store();
+    whc_store.init(config);
 
-// paging toolbar
-var config = new Object({
-	store: whc_store.display,
-    items: ['-',
-    {
-        iconCls: 'x-btn-text-icon add',
-        handler: add,
-        text: 'Dodaj'
-    }]
-});
-whc_ptb = new PagingToolBar();
-whc_ptb.init(config);
+    // paging toolbar
+    var config = new Object({
+        store: whc_store.display,
+        items: ['-',
+            {
+                iconCls: 'x-btn-text-icon add',
+                handler: add,
+                text: 'Dodaj'
+            }]
+    });
+    whc_ptb = new PagingToolBar();
+    whc_ptb.init(config);
 
-// grid
-var config = new Object({
-	store: whc_store.display,
-	tbar: whc_ptb.display,
-	title: 'Klient',
-	columns: [
-		{ id: 'id', dataIndex: 'id', header: 'Id', menuDisabled: true, sortable: false, width: 50 },
-		{ id: 'user', dataIndex: 'user', header: 'Użytkownik', menuDisabled: true, sortable: false },
-        { id: 'name', dataIndex: 'name', header: 'Imię', menuDisabled: true, sortable: false },
-        { id: 'surname', dataIndex: 'surname', header: 'Nazwisko', menuDisabled: true, sortable: false },
-        { id: 'date_added', dataIndex: 'date_added', header: 'Data', menuDisabled: true, sortable: false },
-        { id: 'options', header: 'Opcje', renderer: render_options, menuDisabled: true, sortable: false }
-	],
-    listeners: {
-        celldblclick: function(grid, rowIndex, columnIndex, e) {
-            var record = grid.getStore().getAt(rowIndex);
-            var fieldName = grid.getColumnModel().getDataIndex(columnIndex);
-            var data = record.get(fieldName);
-            var data_id = record.get('id');
-            var data_user = record.get('user');
-            edit(data_id, data_user);
+    // grid
+    var config = new Object({
+        store: whc_store.display,
+        tbar: whc_ptb.display,
+        title: 'Klient',
+        columns: [
+            { id: 'id', dataIndex: 'id', header: 'Id', menuDisabled: true, sortable: false, width: 50 },
+            { id: 'user', dataIndex: 'user', header: 'Użytkownik', menuDisabled: true, sortable: false },
+            { id: 'name', dataIndex: 'name', header: 'Imię', menuDisabled: true, sortable: false },
+            { id: 'surname', dataIndex: 'surname', header: 'Nazwisko', menuDisabled: true, sortable: false },
+            { id: 'date_added', dataIndex: 'date_added', header: 'Data', menuDisabled: true, sortable: false },
+            { id: 'options', header: 'Opcje', renderer: render_options, menuDisabled: true, sortable: false }
+        ],
+        listeners: {
+            celldblclick: function(grid, rowIndex, columnIndex, e) {
+                var record = grid.getStore().getAt(rowIndex);
+                var fieldName = grid.getColumnModel().getDataIndex(columnIndex);
+                var data = record.get(fieldName);
+                var data_id = record.get('id');
+                var data_user = record.get('user');
+                edit(data_id, data_user);
+            }
         }
+    });
+    whc_grid = new EditorGridPanel();
+    whc_grid.init(config);
+
+    // panel
+    var config = new Object({
+        items: [ whc_grid.display ]
+    });
+    whc_panel = new Panel();
+    whc_panel.init(config);
+    whc_panel.display.render(Ext.get('div_whc'));
+
+    // store
+    whc_store.display.load({ params: { start: 0, limit: _paging_limit }});
+
+    // store
+    function whc_store_reload(index){
+        whc_store.display.load({ params: { start: 0, limit: _paging_limit, id: index }});
     }
-});
-whc_grid = new EditorGridPanel();
-whc_grid.init(config);
 
-// panel
-var config = new Object({
-	items: [ whc_grid.display ]
-});
-whc_panel = new Panel();
-whc_panel.init(config);
-whc_panel.display.render(Ext.get('div_whc'));
-
-// store
-whc_store.display.load({ params: { start: 0, limit: _paging_limit }});
-
-// store
-function whc_store_reload(index){
-	whc_store.display.load({ params: { start: 0, limit: _paging_limit, id: index }});
-}
-
-// render options
-function render_options(value, p, record) {
-    if (record.data.active == 0 ) {
-        url = '/'+n1+'/active_set/'+record.data.id+',1,wh_client';
-        img = 'cancel.png';
-    } else {
-        url = '/'+n1+'/active_set/'+record.data.id+',0,wh_client';
-        img = 'accept.png';
+    // render options
+    function render_options(value, p, record) {
+        if (record.data.active == 0 ) {
+            url = '/'+n1+'/active_set/'+record.data.id+',1,wh_client';
+            img = 'cancel.png';
+        } else {
+            url = '/'+n1+'/active_set/'+record.data.id+',0,wh_client';
+            img = 'accept.png';
+        }
+        return String.format('<a href="javascript:active(\''+base_url+url+'\');"><img src="images/icon/'+img+'" border="0"></a> <a href="javascript:edit('+record.data.id+',\''+record.data.user+'\');"><img src="images/icon/page_edit.png"></a> <a href="javascript:delete_client(\''+base_url+'/'+n1+'/delete/'+record.data.id+'\');"><img src="images/icon/delete.png" border="0"></a>');
     }
-    return String.format('<a href="javascript:active(\''+base_url+url+'\');"><img src="images/icon/'+img+'" border="0"></a> <a href="javascript:edit('+record.data.id+',\''+record.data.user+'\');"><img src="images/icon/page_edit.png"></a> <a href="javascript:delete(\''+base_url+'/'+n1+'/delete/'+record.data.id+'\');"><img src="images/icon/delete.png" border="0"></a>');
-}
 
-// add
-function add() {
-    tab_id = 'whc_add';
-    tab_title = 'Dodaj';
-    tab_url = base_url+'/'+n1+'/display_add';
-    center.ui.tab_add(tab_id, tab_title, tab_url);
-}
+    // add
+    function add() {
+        tab_id = 'whc_add';
+        tab_title = 'Dodaj';
+        tab_url = base_url+'/'+n1+'/display_add';
+        center.ui.tab_add(tab_id, tab_title, tab_url);
+    }
 
-// edit
-function edit(id, title) {
-    tab_id = 'whc_edit_'+id;
-    tab_title = title;
-    tab_url = base_url+'/'+n1+'/display_edit/'+id;
-    center.ui.tab_add(tab_id, tab_title, tab_url);
-}
+    // edit
+    function edit(id, title) {
+        tab_id = 'whc_edit_'+id;
+        tab_title = title;
+        tab_url = base_url+'/'+n1+'/display_edit/'+id;
+        center.ui.tab_add(tab_id, tab_title, tab_url);
+    }
 
-// delete
-function delete(url) {
-	new Helper_Delete().delete_confirm(url, 'grid', whc_store, null);
-}
+    // delete
+    function delete_client(url) {
+        new Helper_Delete().delete_confirm(url, 'grid', whc_store, null);
+    }
 
-// active
-function active(url) {
-    new Helper_Ui().url_call(url, 'grid', whc_store, null);
-}
+    // active
+    function active(url) {
+        new Helper_Ui().url_call(url, 'grid', whc_store, null);
+    }
 
-{/literal}
+    {/literal}
 </script>
 <div id="div_whc"></div>
