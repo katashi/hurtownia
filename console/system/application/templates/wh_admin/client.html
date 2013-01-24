@@ -80,7 +80,7 @@
             url = '/'+n1+'/active_set/'+record.data.id+',0,wh_client';
             img = 'accept.png';
         }
-        return String.format('<a href="javascript:active(\''+base_url+url+'\');"><img src="images/icon/'+img+'" border="0"></a> <a href="javascript:edit('+record.data.id+',\''+record.data.user+'\');"><img src="images/icon/page_edit.png"></a> <a href="javascript:delete_client(\''+base_url+'/'+n1+'/delete/'+record.data.id+'\');"><img src="images/icon/delete.png" border="0"></a>');
+        return String.format('<a href="javascript:active(\''+base_url+url+'\');"><img src="images/icon/'+img+'" border="0"></a> <a href="javascript:edit('+record.data.id+',\''+record.data.user+'\');"><img src="images/icon/page_edit.png"></a> <a href="javascript:delete_confirm(\''+base_url+'/'+n1+'/delete/'+record.data.id+'\');"><img src="images/icon/delete.png" border="0"></a>');
     }
 
     // add
@@ -100,7 +100,7 @@
     }
 
     // delete
-    function delete_client(url) {
+    function delete_confirm(url) {
         new Helper_Delete().delete_confirm(url, 'grid', whc_store, null);
     }
 
