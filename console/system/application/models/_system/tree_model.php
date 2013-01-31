@@ -308,7 +308,7 @@ class Tree_Model extends Model {
 			}
 		}
         //
-		// get from warehouse newsletter
+		// get from warehouse product
 		//
 		if ($table == 'warehouse_product') {
 			$query = $this->db->query("SELECT
@@ -336,7 +336,36 @@ class Tree_Model extends Model {
 				$nodes[] = $record;
 			}
 		}
-		return $nodes;
+        //
+        // get from wh product
+        //
+        if ($table == 'wh_product') {
+            $query = $this->db->query("SELECT
+			`wh_product_relations`.`id` as `mri`,
+			`wh_product`.`id`,
+			`wh_product`.`title`
+			FROM
+			`wh_product_relations`
+			Left Join `wh_product` ON `wh_product`.`id` = `wh_product_relations`.`id_element`
+			WHERE
+			`wh_product_relations`.`id_tree` =  '".$id_tree."'
+			ORDER BY
+			`wh_product_relations`.`position` ASC");
+            foreach ($query->result() as $item) {
+                $record = array();
+                $record['id_relations'] = $item->mri;
+                $record['tree'] = $table;
+                $record['id'] = 'e'.$item->id;
+                $record['id_element'] = $item->id;
+                $record['text'] = $item->title .' (id='.$item->id.')';
+                $record['type'] = $table;
+                $record['genre'] = 'element';
+                $record['leaf'] = true;
+                $record['iconCls'] = 'page';
+                $nodes[] = $record;
+            }
+        }
+        return $nodes;
 	}
 	
 	//

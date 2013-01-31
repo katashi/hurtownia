@@ -11,14 +11,45 @@ class Product_Model extends Main_Model {
 	}
 
     // load
-    function load_all_count() {
-        $this->db->from($this->table_name);
+    function load_all_count($id_tree) {
+        if (isset($id_tree)) {
+            // id_tree exists and we need return only counted number of dependent nodes
+            $this->db->where('id_tree', $id_tree);
+            $this->db->from($this->table_name.'_relations');
+        } else {
+            // count all products
+            $this->db->from($this->table_name);
+        }
         return $this->db->count_all_results();
     }
-    function load_all() {
+    function load_all($id_tree) {
         $this->limit_check();
-        $query = $this->db->get($this->table_name);
-        $record = $query->result_array();
+        if (isset($id_tree)) {
+            // id_tree exists and we need return only dependent nodes
+            $this->db->where('id_tree', $id_tree);
+            $this->db->order_by('position');
+            $query = $this->db->get($this->table_name.'_relations');
+            $result = $query->result();
+            $record = array();
+            foreach ($result as $item) {
+                $values['tree'] = 'wh_product';
+                $values['relations_id'] = $item->id;
+                $values['relations_id_element'] = $item->id_element;
+                $query2 = $this->db->query('select * from '.$this->table_name.' where id='.$item->id_element);
+                foreach ($query2->result() as $item2) {
+                    $values['id'] = $item2->id;
+                    $values['title'] = $item2->title;
+                    $values['header'] = $item2->header;
+                    $values['date_added'] = $item2->date_added;
+                    $values['active'] = $item2->active;
+                }
+                $record[] = $values;
+            }
+        } else {
+            // load all products
+            $query = $this->db->get($this->table_name);
+            $record = $query->result_array();
+        }
         return $record;
     }
     function load($id) {

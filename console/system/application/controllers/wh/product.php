@@ -13,10 +13,12 @@ class Product extends Main {
     }
 
     // display
-    function display() {
+    function display($id_tree = null) {
+        $this->ci->smarty->assign('id', $id_tree);
         $this->ci->smarty->display('wh_admin/product.html');
     }
-    function display_add() {
+    function display_add($id_tree = 0) {
+        $this->ci->smarty->assign('id', $id_tree);
         $this->ci->smarty->display('wh_admin/product_add.html');
     }
     function display_edit($id = null) {
@@ -25,8 +27,8 @@ class Product extends Main {
     }
 
     // load
-    function load_all() {
-        echo '{"total":'.json_encode($this->product_model->load_all_count()).', "data":'.json_encode($this->product_model->load_all()).'}';
+    function load_all($id_tree = null) {
+        echo '{"total":'.json_encode($this->product_model->load_all_count($id_tree)).', "data":'.json_encode($this->product_model->load_all($id_tree)).'}';
     }
     function load($id = null) {
         echo '{"success": 1, "data":'.json_encode($this->product_model->load($id)).'}';

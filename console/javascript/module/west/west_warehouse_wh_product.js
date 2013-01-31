@@ -1,7 +1,7 @@
 //
-// west structure website
+// west warehouse wh_product
 // 
-function West_Structure_Website() {
+function West_Warehouse_Wh_Product() {
 	
 	//
 	// controller section
@@ -11,11 +11,11 @@ function West_Structure_Website() {
 	this.init = function() {
 		// here we construct ui
 		var config = new Object({
-			collapsible: true,
-			title: 'Strona Internetowa',
-			titleCollapse: true,
+			collapsible: false,
+			title: 'Produkty',
+			titleCollapse: false,
 			tools: [
-			    { id:'save', qtip: 'Dodaj Katalog', handler: this.directory_add },
+			    { id:'save', qtip: 'Dodaj Produkt', handler: this.directory_add },
 			    { id:'refresh', qtip: 'Odśwież', handler: this.refresh }
 			]
 		});
@@ -27,10 +27,11 @@ function West_Structure_Website() {
 		//
 		//
 		var config = new Object({
-            controller: '_structure:',
-			dataUrl: base_url+'/_system:tree/tree_create/structure_website',
-            ddGroup: 'structure_website',
-			id: 'structure_website'
+            controller: 'wh:',
+			dataUrl: base_url+'/_system:tree/tree_create/wh_product',
+			ddGroup: 'product',
+            //ddGroupExtended: 'structure_website',
+			id: 'product'
 		});
 		this.ui_tree = new Tree();
 		this.ui_tree.init(config);
@@ -39,13 +40,13 @@ function West_Structure_Website() {
 	
 	// directory_add
 	this.directory_add = function() {
-		new Helper_Ui().add_window('structure_website_directory_add', 'Dodaj Katalog', base_url +'/_system:tree/add/structure_website,1');
+		new Helper_Ui().add_window('wh_product_directory_add', 'Dodaj katalog', base_url +'/_system:tree/add/wh:product,0');
 	}
 	
 	// refresh content
 	this.refresh = function() {
-		west_structure_website.ui_tree.root.reload();
-		west_structure_website.ui_tree.path_expand();
+		west_warehouse_wh_product.ui_tree.root.reload();
+		west_warehouse_wh_product.ui_tree.path_expand();
 	}
 	
 }

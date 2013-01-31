@@ -13,8 +13,8 @@ function West_Warehouse() {
 		var config = new Object({
 			baseCls: 'ks',
 			bodyStyle: 'padding: 0px',
-			collapsed: true,
-			collapsible: true,
+			collapsed: false,
+			collapsible: false,
 			id: 'west_warehouse',
 			title: 'Magazyn',
 			titleCollapse: true
@@ -45,8 +45,13 @@ function West_Warehouse() {
 			west_warehouse_product = new West_Warehouse_Product();
 			west_warehouse_product.init(); 
 			new Helper_Ui().add_ui(this.ui.display, west_warehouse_product.ui.display);
-		}        
-		
-	}
+		}
+        if (window._west_warehouse_wh_product) {
+            west_warehouse_wh_product = new West_Warehouse_Wh_Product();
+            west_warehouse_wh_product.init();
+            new Helper_Ui().add_ui(this.ui.display, west_warehouse_wh_product.ui.display);
+        }
+
+    }
 	
 }
