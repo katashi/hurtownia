@@ -5,7 +5,7 @@
     var n1 = 'wh:product';
 
     // store
-    var fields = new Array('id','title','price_netto','price_brutto','stock','active');
+    var fields = new Array('id','title','price_netto','price_brutto','stock','active','stock','order_min','order_max');
     var config = new Object({
         fields: fields,
         format: 'json',
@@ -82,8 +82,6 @@
     // render options
     function render_options(value, p, record) {
         
-        
-        
         if (record.data.active == 0 ) {
             url = '/'+n1+'/active_set/'+record.data.id+',1,wh_client';
             img = 'cancel.png';
@@ -91,7 +89,19 @@
             url = '/'+n1+'/active_set/'+record.data.id+',0,wh_client';
             img = 'accept.png';
         }
-        return String.format('<input type="text" style="width:30px;" onkeyup="javascript:assign_add_to_cart_href('+record.data.id+');" value="1" id="amount-'+record.data.id+'" name="amount-'+record.data.id+'"/><a href="javascript:add_to_cart('+record.data.id+', 1)" id="add-to-cart-'+record.data.id+'" class="addToCart");"><img src="images/icon/cart.png"></a> <a href="javascript:active(\''+base_url+url+'\');"><img src="images/icon/'+img+'" border="0"></a> <a href="javascript:edit('+record.data.id+', \''+record.data.title+'\');"><img src="images/icon/page_edit.png"></a> <a href="javascript:ask('+record.data.id+', \''+record.data.title+'\');"><img src="images/icon/zoom.png"></a> <a href="javascript:delete_confirm(\''+base_url+'/'+n1+'/delete/'+record.data.id+'\');"><img src="images/icon/delete.png" border="0"></a>');
+        
+        //check if stock is greater than maximum order limit
+        if(parseInt(record.data.stock) < parseInt(record.data.order_max))
+            vMax = record.data.stock;
+        else
+            vMax = record.data.order_max;
+        
+        if(parseInt(record.data.stock) < parseInt(record.data.order_min))
+            disabled = 'disabled="disabled"';
+        else
+            disabled = '';
+        
+        return String.format('<input type="text" maxvalue="'+vMax+'" minvalue="'+record.data.order_min+'" '+disabled+' style="width:30px;" onkeyup="javascript:add_to_cart_keyup('+record.data.id+');" value="'+record.data.order_min+'" id="amount-'+record.data.id+'" name="amount-'+record.data.id+'"/><a href="javascript:add_to_cart('+record.data.id+', 1)" id="add-to-cart-'+record.data.id+'" class="addToCart");"><img src="images/icon/cart.png"></a> <a href="javascript:active(\''+base_url+url+'\');"><img src="images/icon/'+img+'" border="0"></a> <a href="javascript:edit('+record.data.id+', \''+record.data.title+'\');"><img src="images/icon/page_edit.png"></a> <a href="javascript:ask('+record.data.id+', \''+record.data.title+'\');"><img src="images/icon/zoom.png"></a> <a href="javascript:delete_confirm(\''+base_url+'/'+n1+'/delete/'+record.data.id+'\');"><img src="images/icon/delete.png" border="0"></a>');
     }
 
     // add
@@ -102,6 +112,7 @@
         center.ui.tab_add(tab_id, tab_title, tab_url);
     }
     
+    //ask
     function ask(id, title) {
         tab_id = 'whp_ask';
         tab_title = 'Zadaj pytanie : '+title;
@@ -109,21 +120,37 @@
         center.ui.tab_add(tab_id, tab_title, tab_url);
     }
     
+    //export for csv
     function export_csv(){
         
     }
     
+    //export for subiekt
     function export_subiekt(){
         
     }
     
+    //add to cart
     function add_to_cart(id, amount){
         alert(amount);
     }
     
-    function assign_add_to_cart_href(id)
+    // key up for add to cart input
+    function add_to_cart_keyup(id)
     {
+        //setting the href attribute
         $('#add-to-cart-'+id).attr('href',"javascript:add_to_cart("+id+",'"+$('#amount-'+id).val()+"')");
+        //validation for min/max value
+        var minValue = parseInt($('#amount-'+id).attr('minvalue'));
+        var value = parseInt($('#amount-'+id).val());
+        var maxValue = parseInt($('#amount-'+id).attr('maxvalue'));
+        if(value < minValue)
+        {
+            $('#amount-'+id).val(minValue);
+            return false;
+        }
+        if(value > maxValue)
+            $('#amount-'+id).val(maxValue);
     }
 
     // edit
@@ -147,3 +174,7 @@
     {/literal}
 </script>
 <div id="div_whp"></div>
+<script type="text/javascript">
+    
+    
+</script>
