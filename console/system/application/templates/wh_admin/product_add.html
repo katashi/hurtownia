@@ -20,6 +20,26 @@
     });
     tax_store = new Store();
     tax_store.init(config);
+    
+    var tax_combo = new Ext.form.ComboBox({
+        displayField: 'title',
+        editable: false,
+        fieldLabel: 'VAT',
+        hiddenName: 'vat',
+        name: 'vat',
+        id: 'vat',
+        store: tax_store,
+        triggerAction: 'all',
+        width: 350,
+        valueField: 'value',
+        xtype: 'combo'
+    });
+            
+    tax_combo.on('change', function(combo, record, index) {
+        var percent = 1+(record/100);
+        var newValue = parseFloat($('#price_netto').val())*percent;
+        $('#price_brutto').val(Number((newValue).toFixed(2)));
+    });
 
     //    panel
     var config = new Object({
@@ -126,6 +146,13 @@
                 xtype: 'numberfield',
                 decimalPrecision: 2,
                 id: 'price_netto',
+                listeners:{
+                    change: function(combo, record, index) {
+                        var percent = 1+(parseInt($('#vat').val())/100);
+                        var newValue = record*percent;
+                        $('#price_brutto').val(Number((newValue).toFixed(2)));
+                    }
+                },
                 width: 350
             },{
                 fieldLabel: 'Cena brutto',
@@ -135,26 +162,7 @@
                 decimalPrecision: 2,
                 disabled: true,
                 width: 350
-            },{
-                displayField: 'title',
-                editable: false,
-                fieldLabel: 'VAT',
-                hiddenName: 'vat',
-                name: 'vat',
-                id: 'vat',
-                store: tax_store,
-                triggerAction: 'all',
-                width: 350,
-                valueField: 'value',
-                listener: {
-                    'change': function(field, newValue, oldValue)
-                    {
-                        alert(newValue);
-                        //                        $('#price_brutto').val(($('#price_netto').val()*newValue/100));
-                    }
-                },
-                xtype: 'combo'
-            },{
+            },tax_combo,{
                 fieldLabel: 'Ilość',
                 name: 'stock',
                 xtype: 'numberfield',
@@ -187,6 +195,10 @@
     whp_add_fp.init(config);
     whp_add_fp.display.render(Ext.get('div_whp_add'));
 
+    function changeTax(){
+        Ext.MessageBox.alert('Informacja', 'Błąd');
+    }
+
     // submit
     function whp_add_submit() {
         whp_add_fp.display.form.submit({
@@ -203,7 +215,6 @@
             waitMsg: 'Oczekiwanie'
         });
     }
-
 
     {/literal}
 </script>
