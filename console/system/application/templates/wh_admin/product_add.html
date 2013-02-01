@@ -1,0 +1,210 @@
+<script type="text/javascript">
+    {literal}
+    
+    var fields = new Array('id', 'title');
+    var config = new Object({
+        fields: fields,
+        format: 'json',
+        id: 'color',
+        url: base_url+'/wh:product_dict_color/load_all'
+    });
+    color_store = new Store();
+    color_store.init(config);
+    
+    var fields = new Array('value', 'title');
+    var config = new Object({
+        fields: fields,
+        format: 'json',
+        id: 'color',
+        url: base_url+'/wh:tax/load_all'
+    });
+    tax_store = new Store();
+    tax_store.init(config);
+
+    //    panel
+    var config = new Object({
+        title: 'Dodaj',
+        items: [{
+                fieldLabel: 'Nazwa',
+                name: 'title',
+                xtype: 'textfield',
+                width: 350
+            },{
+                fieldLabel: 'Nagłówek',
+                name: 'header',
+                xtype: 'textfield',
+                width: 350
+            },{
+                fieldLabel: 'Opis',
+                name: 'description',
+                xtype: 'textarea', 
+                allowBlank: false, 
+                blankText: "Pole wymagane", 
+                height: 160,   
+                width: 350
+            },{
+                fieldLabel: 'Gwarancja',
+                name: 'warranty',
+                xtype: 'textfield',
+                width: 350
+            },{
+                displayField: 'title',
+                editable: false,
+                fieldLabel: 'Kolor',
+                hiddenName: 'color',
+                name: 'color',
+                store: color_store,
+                triggerAction: 'all',
+                width: 350,
+                valueField: 'id',
+                xtype: 'combo'
+            },{
+                fieldLabel: 'Tworzywo',
+                name: 'material',
+                xtype: 'textfield',
+                width: 350
+            },{
+                fieldLabel: 'Waga',
+                name: 'weight',
+                xtype: 'numberfield',
+                decimalPrecision: 0,
+                value: 0,
+                width: 350
+            },{
+                fieldLabel: 'Długość',
+                name: 'dimension_length',
+                xtype: 'numberfield',
+                decimalPrecision: 0,
+                value: 0,
+                width: 350
+            },{
+                fieldLabel: 'Szerokość',
+                name: 'dimension_width',
+                xtype: 'numberfield',
+                decimalPrecision: 0,
+                value: 0,
+                width: 350
+            },{
+                fieldLabel: 'Wysokość',
+                name: 'dimension_height',
+                xtype: 'numberfield',
+                decimalPrecision: 0,
+                value: 0,
+                width: 350
+            },{
+                fieldLabel: 'Zdjęcie 1',
+                name: 'image1',
+                xtype: 'fileuploadfield',
+                width: 350
+            },
+            {
+                fieldLabel: 'Zdjęcie 2',
+                name: 'image2',
+                xtype: 'fileuploadfield',
+                width: 350
+            },
+            {
+                fieldLabel: 'Zdjęcie 3',
+                name: 'image3',
+                xtype: 'fileuploadfield',
+                width: 350
+            },
+            {
+                fieldLabel: 'Zdjęcie 4',
+                name: 'image4',
+                xtype: 'fileuploadfield',
+                width: 350
+            },
+            {
+                fieldLabel: 'Zdjęcie 5',
+                name: 'image5',
+                xtype: 'fileuploadfield',
+                width: 350
+            },{
+                fieldLabel: 'Cena netto',
+                name: 'price_netto',
+                xtype: 'numberfield',
+                decimalPrecision: 2,
+                id: 'price_netto',
+                width: 350
+            },{
+                fieldLabel: 'Cena brutto',
+                name: 'price_brutto',
+                xtype: 'numberfield',
+                id: 'price_brutto',
+                decimalPrecision: 2,
+                disabled: true,
+                width: 350
+            },{
+                displayField: 'title',
+                editable: false,
+                fieldLabel: 'VAT',
+                hiddenName: 'vat',
+                name: 'vat',
+                id: 'vat',
+                store: tax_store,
+                triggerAction: 'all',
+                width: 350,
+                valueField: 'value',
+                listener: {
+                    'change': function(field, newValue, oldValue)
+                    {
+                        alert(newValue);
+                        //                        $('#price_brutto').val(($('#price_netto').val()*newValue/100));
+                    }
+                },
+                xtype: 'combo'
+            },{
+                fieldLabel: 'Ilość',
+                name: 'stock',
+                xtype: 'numberfield',
+                decimalPrecision: 0,
+                value: 0,
+                width: 350
+            },{
+                fieldLabel: 'Minimalna ilość zamówienia',
+                name: 'order_min',
+                xtype: 'numberfield',
+                decimalPrecision: 0,
+                value: 1,
+                width: 350
+            },{
+                fieldLabel: 'Maksymalna ilość zamówienia',
+                name: 'order_max',
+                xtype: 'numberfield',
+                decimalPrecision: 0,
+                value: 100,
+                width: 350
+            }
+            
+        ],
+        buttons: [{
+                handler: whp_add_submit,
+                text: 'Dodaj'
+            }]
+    });
+    whp_add_fp = new FormPanel();
+    whp_add_fp.init(config);
+    whp_add_fp.display.render(Ext.get('div_whp_add'));
+
+    // submit
+    function whp_add_submit() {
+        whp_add_fp.display.form.submit({
+            method: 'POST',
+            url: base_url +'/wh:product/add',
+            success: function() {
+                Ext.MessageBox.alert('Informacja', 'Gotowe');
+                whp_add_fp.display.getForm().reset();
+                whp_store.display.reload();
+            },
+            failure: function() {
+                Ext.MessageBox.alert('Informacja', 'Błąd');
+            },
+            waitMsg: 'Oczekiwanie'
+        });
+    }
+
+
+    {/literal}
+</script>
+<div id="div_whp_add"></div>
