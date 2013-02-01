@@ -7,7 +7,7 @@ var base_url = 'index.php/main/run';
 //
 // paging limit per load
 //
-var _paging_limit = 100;
+var _paging_limit = 20;
 
 //
 // ui base include
