@@ -11,6 +11,15 @@
     color_store = new Store();
     color_store.init(config);
     
+    var config = new Object({
+        fields: fields,
+        format: 'json',
+        id: 'color',
+        url: base_url+'/wh:product_dict_vendor/load_all'
+    });
+    vendor_store = new Store();
+    vendor_store.init(config);
+    
     var fields = new Array('value', 'title');
     var config = new Object({
         fields: fields,
@@ -67,6 +76,17 @@
                 name: 'warranty',
                 xtype: 'textfield',
                 width: 350
+            },{
+                displayField: 'title',
+                editable: false,
+                fieldLabel: 'Sprzedawca',
+                hiddenName: 'id_vendor',
+                name: 'id_vendor',
+                store: vendor_store,
+                triggerAction: 'all',
+                width: 350,
+                valueField: 'id',
+                xtype: 'combo'
             },{
                 displayField: 'title',
                 editable: false,
