@@ -16,6 +16,8 @@ body,table,tr,td {
 /* icon */
 .accept { background: url('../images/icon/accept.png') 0px no-repeat !important; }
 .add { background: url('../images/icon/add.png') 0px no-repeat !important; } 
+.export-csv { background: url('../images/icon/page.png') 0px no-repeat !important; } 
+.export-subiekt { background: url('../images/icon/page.png') 0px no-repeat !important; } 
 .application_edit { background: url('../images/icon/application_edit.png') 0px no-repeat !important; } 
 .bacardi { background: url('../images/icon/bacardi.png') 0px no-repeat !important; } 
 .book_key { background: url('../images/icon/book_key.png') 0px no-repeat !important; } 
