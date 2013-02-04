@@ -25,6 +25,14 @@ class Tax_Model extends Main_Model {
         $record = $query->result_array();
         return $record;
     }
+    
+    function load($value) {
+        $this->db->where('value', $value);
+        $query = $this->db->get($this->table_name);
+        $record = $query->row_array();
+        return $record;
+    }
+    
 
 }
 

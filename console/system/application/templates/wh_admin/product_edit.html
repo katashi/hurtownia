@@ -1,6 +1,6 @@
 <script type="text/javascript">
     {literal}
-    
+
     var fields = new Array('id', 'title');
     var config = new Object({
         fields: fields,
@@ -20,29 +20,29 @@
     vendor_store = new Store();
     vendor_store.init(config);
     
-//    var fields = new Array('id', 'title');
-//    var config = new Object({
-//        fields: fields,
-//        format: 'json',
-//        id: 'color',
-//        url: base_url+'/wh:tree/load_all'
-//    });
-//    tree_store = new Store();
-//    tree_store.init(config);
-//    
-//    var tree_combo = new Ext.form.ComboBox({
-//        displayField: 'title',
-//        editable: false,
-//        fieldLabel: 'Kategoria',
-//        hiddenName: 'tree',
-//        name: 'tree',
-//        id: 'tree',
-//        store: tax_store,
-//        triggerAction: 'all',
-//        width: 350,
-//        valueField: 'id',
-//        xtype: 'combo'
-//    });
+    //    var fields = new Array('id', 'title');
+    //    var config = new Object({
+    //        fields: fields,
+    //        format: 'json',
+    //        id: 'color',
+    //        url: base_url+'/wh:tree/load_all'
+    //    });
+    //    tree_store = new Store();
+    //    tree_store.init(config);
+    //    
+    //    var tree_combo = new Ext.form.ComboBox({
+    //        displayField: 'title',
+    //        editable: false,
+    //        fieldLabel: 'Kategoria',
+    //        hiddenName: 'tree',
+    //        name: 'tree',
+    //        id: 'tree',
+    //        store: tax_store,
+    //        triggerAction: 'all',
+    //        width: 350,
+    //        valueField: 'id',
+    //        xtype: 'combo'
+    //    });
     
     var fields = new Array('value', 'title');
     var config = new Object({
@@ -73,10 +73,10 @@
         var newValue = parseFloat($('#price_netto').val())*percent;
         $('#price_brutto').val(Number((newValue).toFixed(2)));
     });
-
+   
     //    panel
     var config = new Object({
-        title: 'Dodaj',
+        title: 'Edytuj',
         items: [{
                 fieldLabel: 'Nazwa',
                 name: 'title',
@@ -106,6 +106,7 @@
                 fieldLabel: 'Sprzedawca',
                 hiddenName: 'id_vendor',
                 name: 'id_vendor',
+                id: 'id_vendor',
                 store: vendor_store,
                 triggerAction: 'all',
                 width: 350,
@@ -117,6 +118,7 @@
                 fieldLabel: 'Kolor',
                 hiddenName: 'color',
                 name: 'color',
+                id: 'color',
                 store: color_store,
                 triggerAction: 'all',
                 width: 350,
@@ -231,26 +233,29 @@
             
         ],
         buttons: [{
-                handler: whp_add_submit,
-                text: 'Dodaj'
-            }]
+                handler: whp_edit_submit,
+                text: 'Zapisz'
+            }],
+        listeners: {
+            afterrender: function (comp) {
+                
+            }
+        }
     });
-    whp_add_fp = new FormPanel();
-    whp_add_fp.init(config);
-    whp_add_fp.display.render(Ext.get('div_whp_add'));
-
-    function changeTax(){
-        Ext.MessageBox.alert('Informacja', 'Błąd');
-    }
+    whp_edit_fp_{/literal}{$id}{literal} = new FormPanel();
+    var name = 'whp_edit_fp_{/literal}{$id}{literal}';
+    var whp_edit_fp = eval(name);
+    whp_edit_fp.init(config);
+    
+    whp_edit_fp.display.render(Ext.get('div_whp_edit_{/literal}{$id}{literal}'));
 
     // submit
-    function whp_add_submit() {
-        whp_add_fp.display.form.submit({
+    function whp_edit_submit() {
+        whp_edit_fp.display.form.submit({
             method: 'POST',
-            url: base_url +'/wh:product/add',
+            url: base_url +'/wh:product/edit/{/literal}{$id}{literal}',
             success: function() {
-                Ext.MessageBox.alert('Informacja', 'Gotowe');
-                whp_add_fp.display.getForm().reset();
+                Ext.MessageBox.alert('Informacja', 'Obiekt zapisany');
                 whp_store.display.reload();
             },
             failure: function() {
@@ -260,6 +265,63 @@
         });
     }
 
+    // load
+    function whp_edit_load() {
+        whp_edit_fp.display.form.load({
+            method: 'POST',
+            url: base_url +'/wh:product/load/{/literal}{$id}{literal}',
+            waitMsg: 'Oczekiwanie',
+            success: function() {
+                
+                //setting vendor value
+                var element = Ext.getCmp('id_vendor');
+                var id_vendor = element.getValue();
+                Ext.Ajax.request({
+                    waitMsg: 'Oczekiwanie',
+                    url: base_url +'/wh:product_dict_vendor/load/'+id_vendor,
+                    method: 'POST',
+                    success:function(response,options){
+                        var vendor=Ext.decode(response.responseText);
+                        element.setValue(vendor.data.title);
+                    }
+                });
+                    
+                //setting color value
+                var element2 = Ext.getCmp('color');
+                var id_color = element2.getValue();
+                Ext.Ajax.request({
+                    waitMsg: 'Oczekiwanie',
+                    url: base_url +'/wh:product_dict_color/load/'+id_color,
+                    method: 'POST',
+                    success:function(response,options){
+                        var color=Ext.decode(response.responseText);
+                        element2.setValue(color.data.title);
+                    }
+                });
+                
+                //setting vat value
+                var element3 = Ext.getCmp('vat');
+                var id_vat = element3.getValue();
+                Ext.Ajax.request({
+                    waitMsg: 'Oczekiwanie',
+                    url: base_url +'/wh:tax/load/'+id_vat,
+                    method: 'POST',
+                    success:function(response,options){
+                        var vat=Ext.decode(response.responseText);
+                        element3.setValue(vat.data.title);
+                    }
+                });
+                
+            },
+            failure: function() {
+                Ext.MessageBox.alert('Informacja', 'Błąd');
+            }
+        });
+    }
+
+    // load
+    whp_edit_load();
+    
     {/literal}
 </script>
-<div id="div_whp_add"></div>
+<div id="div_whp_edit_{$id}"></div>

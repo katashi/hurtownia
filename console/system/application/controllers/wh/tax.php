@@ -17,5 +17,8 @@ class Tax extends Main {
         echo '{"total":'.json_encode($this->tax_model->load_all_count()).', "data":'.json_encode($this->tax_model->load_all()).'}';
     }
    
+    function load($id = null) {
+        echo '{"success": 1, "data":'.json_encode($this->tax_model->load($id)).'}';
+    }
 
 }

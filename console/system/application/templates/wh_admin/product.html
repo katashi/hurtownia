@@ -1,16 +1,31 @@
 <script type="text/javascript">
     {literal}
-
+    
+    var id = 0{/literal}{$id}{literal};
+    
+    var addon = '/';
+    if(id != 0)
+        addon += id;
+    
     // shortcuts
     var n1 = 'wh:product';
 
     // store
-    var fields = new Array('id','title','price_netto','price_brutto','stock','active','stock','order_min','order_max');
+    var fields = new Array('id','title','price_netto','price_brutto','stock','active','order_min','order_max');
     var config = new Object({
-        fields: fields,
+        fields: [
+            { name: 'id', type: 'number' },
+            { name: 'title',  type: 'string' },
+            { name: 'price_netto', type: 'number' },
+            { name: 'price_brutto', type: 'number' },
+            { name: 'stock', type: 'number' },
+            { name: 'active', type: 'number' },
+            { name: 'order_min', type: 'number' },
+            { name: 'order_max', type: 'number' }
+        ],
         format: 'json',
         id: 'whp',
-        url: base_url+'/'+n1+'/load_all'
+        url: base_url+'/'+n1+'/load_all'+addon
     });
     whp_store = new Store();
     whp_store.init(config);
@@ -31,6 +46,19 @@
                 iconCls: 'x-btn-text-icon export-subiekt',
                 handler: export_subiekt,
                 text: 'Export Subiekt'
+            },{
+                fieldLabel: 'Filtruj',
+                name: 'filter',
+                id: 'filter',
+                xtype: 'textfield',
+                enableKeyEvents: true,
+                listener: {
+                    change: function(combo, record, index) {
+                        alert(record);
+                        whp_grid.getStore().filter('title', record);
+                    }  
+                },
+                width: 100
             }]
     });
     whp_ptb = new PagingToolBar();
@@ -69,14 +97,23 @@
     });
     whp_panel = new Panel();
     whp_panel.init(config);
-    whp_panel.display.render(Ext.get('div_whp'));
+    whp_panel.display.render(Ext.get('div_whp_{/literal}{$id}{literal}'));
 
     // store
+    
     whp_store.display.load({ params: { start: 0, limit: _paging_limit }});
+    whp_store.display.filter('title', 'title');
 
     // store
     function whp_store_reload(index){
         whp_store.display.load({ params: { start: 0, limit: _paging_limit, id: index }});
+    }
+    
+    function whp_store_filter()
+    {
+        index = Ext.getCmp('filter').val();
+        alert(index);
+        whp_grid.getStore().filter('title', index);
     }
 
     // render options
@@ -101,7 +138,7 @@
         else
             disabled = '';
         
-        return String.format('<input type="text" maxvalue="'+vMax+'" minvalue="'+record.data.order_min+'" '+disabled+' style="width:30px;" onkeyup="javascript:add_to_cart_keyup('+record.data.id+');" value="'+record.data.order_min+'" id="amount-'+record.data.id+'" name="amount-'+record.data.id+'"/><a href="javascript:add_to_cart('+record.data.id+', 1)" id="add-to-cart-'+record.data.id+'" class="addToCart");"><img src="images/icon/cart.png"></a> <a href="javascript:active(\''+base_url+url+'\');"><img src="images/icon/'+img+'" border="0"></a> <a href="javascript:edit('+record.data.id+', \''+record.data.title+'\');"><img src="images/icon/page_edit.png"></a> <a href="javascript:ask('+record.data.id+', \''+record.data.title+'\');"><img src="images/icon/zoom.png"></a> <a href="javascript:delete_confirm(\''+base_url+'/'+n1+'/delete/'+record.data.id+'\');"><img src="images/icon/delete.png" border="0"></a>');
+        return String.format('<input type="text" maxvalue="'+vMax+'" minvalue="'+record.data.order_min+'" '+disabled+' style="width:30px;" onkeyup="javascript:add_to_cart_keyup('+record.data.id+');" value="'+record.data.order_min+'" id="amount-'+record.data.id+'" name="amount-'+record.data.id+'"/><a href="javascript:add_to_cart('+record.data.id+', '+record.data.order_min+')" id="add-to-cart-'+record.data.id+'" class="addToCart");"><img src="images/icon/cart.png"></a> <a href="javascript:active(\''+base_url+url+'\');"><img src="images/icon/'+img+'" border="0"></a> <a href="javascript:edit('+record.data.id+', \''+record.data.title+'\');"><img src="images/icon/page_edit.png"></a> <a href="javascript:ask('+record.data.id+', \''+record.data.title+'\');"><img src="images/icon/zoom.png"></a> <a href="javascript:delete_confirm(\''+base_url+'/'+n1+'/delete/'+record.data.id+'\');"><img src="images/icon/delete.png" border="0"></a>');
     }
 
     // add
@@ -132,7 +169,15 @@
     
     //add to cart
     function add_to_cart(id, amount){
-        alert(amount);
+        if($('#amount-'+id).attr('disabled'))
+        {
+            
+        }
+        else
+        {
+            alert(amount);
+        }
+
     }
     
     // key up for add to cart input
@@ -147,10 +192,16 @@
         if(value < minValue)
         {
             $('#amount-'+id).val(minValue);
+            //setting the href attribute
+            $('#add-to-cart-'+id).attr('href',"javascript:add_to_cart("+id+",'"+minValue+"')");
             return false;
         }
-        if(value > maxValue)
+        else if(value > maxValue)
+        {
             $('#amount-'+id).val(maxValue);
+            //setting the href attribute
+            $('#add-to-cart-'+id).attr('href',"javascript:add_to_cart("+id+",'"+maxValue+"')");
+        }
     }
 
     // edit
@@ -173,7 +224,7 @@
 
     {/literal}
 </script>
-<div id="div_whp"></div>
+<div id="div_whp_{$id}"></div>
 <script type="text/javascript">
     
     

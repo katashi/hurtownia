@@ -25,7 +25,7 @@ class Product_Dict_Vendor extends Main {
         echo '{"total":'.json_encode($this->product_dict_vendor_model->load_all_count()).', "data":'.json_encode($this->product_dict_vendor_model->load_all()).'}';
     }
     function load($id = null) {
-        echo '{"success": 1, "data":'.json_encode($this->product_dict_model_model->load($id)).'}';
+        echo '{"success": 1, "data":'.json_encode($this->product_dict_vendor_model->load($id)).'}';
     }
 
     // add
